@@ -1,6 +1,9 @@
 import express from "express";
 import * as db from './db-connection'
+import cors from 'cors';
 const app = express();
+
+app.use(cors)
 
 app.get('/preguntas', (req, res) => {
 console.log(req.params)

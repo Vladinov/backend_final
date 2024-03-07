@@ -2,13 +2,13 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.query = void 0;
 var pg_1 = require("pg");
-/*const connectionString = 'postgres://vladi:AzjacmpfPvGJpNLMSOuDn5tCkqISZFA1@dpg-cn5hv1icn0vc73d6ma4g-a/database_jyrd'*/
 var pool = new pg_1.Pool({
-    user: 'postgres',
-    password: '12345678',
-    host: 'localhost',
-    port: 5432,
-    database: 'PROYECTOFINAL3'
+    connectionString: 'postgres://vladi:AzjacmpfPvGJpNLMSOuDn5tCkqISZFA1@dpg-cn5hv1icn0vc73d6ma4g-a/database_jyrd'
+    /* user: 'postgres',
+     password: '12345678',
+     host: 'localhost',
+     port: 5432,
+     database: 'PROYECTOFINAL3'*/
 });
 function query(text) {
     return pool.query(text);

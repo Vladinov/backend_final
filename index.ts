@@ -57,7 +57,7 @@ app.get('/preguntas', (req, res) => {
          index = index - 1
          console.log("index" + index)
          console.log(y[index] )
-         res.send(random)
+         res.send(y[index])
         
       } catch (err) {
          console.error(err);

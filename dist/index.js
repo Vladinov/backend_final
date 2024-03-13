@@ -94,15 +94,7 @@ app.get('/temas', function (req, res) { return __awaiter(void 0, void 0, void 0,
                 min = 0;
                 random = Math.random() * (max - min) + min;
                 console.log("random" + random);
-                while (sum < random) {
-                    sum = sum + y[index].probabilidad;
-                    index = index + 1;
-                    console.log("sum" + sum);
-                }
-                index = index - 1;
-                console.log("index" + index);
-                console.log(y[index]);
-                res.send(y[index]);
+                res.send(random);
                 return [3 /*break*/, 3];
             case 2:
                 err_1 = _a.sent();

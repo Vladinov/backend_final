@@ -45,19 +45,9 @@ app.get('/preguntas', (req, res) => {
          let min = 0
          let random = Math.random() * (max - min) + min;
          console.log("random" + random)
-         while(sum < random) {
-           sum = sum + y[index].probabilidad
-           index = index + 1
-           console.log("sum" + sum)
-     
-     
-     
-     
-         }
-         index = index - 1
-         console.log("index" + index)
-         console.log(y[index] )
-         res.send(y[index])
+
+         res.send(random)
+      
         
       } catch (err) {
          console.error(err);

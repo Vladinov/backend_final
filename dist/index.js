@@ -113,212 +113,180 @@ app.get('/temas', function (req, res) { return __awaiter(void 0, void 0, void 0,
         }
     });
 }); });
-app.post('/orders', jsonParser, function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var now, isoString, dateString, fechaActual, año, mes, dia, fechaFormateada, horaActual, horas, minutos, segundos, horaFormateada, result, err_2;
+app.get('/preguntas/:temas', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var result, err_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                console.log("\x1b[44m", "INSERT INTO orders (menu_id,  state) VALUES (" + req.body.menu_id + ", '" + req.body.state + "')");
-                _a.label = 1;
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, db.query("SELECT * FROM preguntas WHERE temas = '" + req.params.temas + "'")];
             case 1:
-                _a.trys.push([1, 3, , 4]);
-                console.log('\x1b[41m', 'se van a guardar los datos en la base de datos');
-                now = new Date();
-                isoString = now.toISOString();
-                dateString = isoString.substring(0, 10);
-                fechaActual = new Date();
-                año = fechaActual.getFullYear();
-                mes = ('0' + (fechaActual.getMonth() + 1)).slice(-2);
-                dia = ('0' + fechaActual.getDate()).slice(-2);
-                fechaFormateada = año + '-' + mes + '-' + dia;
-                console.log(fechaFormateada);
-                horaActual = new Date();
-                horas = ('0' + horaActual.getHours()).slice(-2);
-                minutos = ('0' + horaActual.getMinutes()).slice(-2);
-                segundos = ('0' + horaActual.getSeconds()).slice(-2);
-                horaFormateada = horas + ':' + minutos + ':' + segundos;
-                console.log(horaFormateada);
-                return [4 /*yield*/, db.query("INSERT INTO orders (menu_id,  state, date, time) VALUES (" + req.body.menu_id + ", '" + req.body.state + "', '" + fechaFormateada + "', '" + horaFormateada + "')")];
-            case 2:
                 result = _a.sent();
-                res.json("Datos guardados correctamente");
-                return [3 /*break*/, 4];
-            case 3:
+                console.log(JSON.stringify(result.rows));
+                res.json(result.rows);
+                return [3 /*break*/, 3];
+            case 2:
                 err_2 = _a.sent();
                 console.error(err_2);
-                res.status(500).send('Internal Server Error');
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
+                res.status(500).send('Internal Server Error. Error al recuperar usuario de base de datos');
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
         }
     });
 }); });
-console.log('\x1b[36m%s\x1b[0m', 'Se enseñaran los menus en la cocina');
-app.get('/orders', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+app.get('/respuestas/:preguntas', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var result, err_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                console.log('\x1b[41m', 'se mostratran los menus en la cocina');
-                return [4 /*yield*/, db.query("SELECT * FROM orders INNER JOIN menus ON orders.menu_id = menus.id ORDER BY state")];
+                return [4 /*yield*/, db.query("SELECT * FROM respuestas WHERE preguntas = '" + req.params.preguntas + "'")];
             case 1:
                 result = _a.sent();
+                console.log(JSON.stringify(result.rows));
                 res.json(result.rows);
                 return [3 /*break*/, 3];
             case 2:
                 err_3 = _a.sent();
                 console.error(err_3);
-                res.status(500).send('Internal Server Error');
+                res.status(500).send('Internal Server Error. Error al recuperar usuario de base de datos');
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }
     });
 }); });
-app.get('/orders/:menu_id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+app.get('/usuarios1/:user_id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var result, err_4;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                console.log('\x1b[41m', 'Actualizar estado de pedido a "done".');
-                return [4 /*yield*/, db.query("UPDATE orders SET state = 'done' WHERE menu_id = " + req.params.menu_id)];
+                return [4 /*yield*/, db.query("SELECT * FROM usuarios WHERE id ='" + req.params.user_id + "'")];
             case 1:
                 result = _a.sent();
-                res.json(result.rows);
+                console.log(JSON.stringify(result.rows[0]));
+                res.json(result.rows[0]);
                 return [3 /*break*/, 3];
             case 2:
                 err_4 = _a.sent();
                 console.error(err_4);
-                res.status(500).send('Internal Server Error');
+                res.status(500).send('Internal Server Error. Error al recuperar usuario de base de datos');
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }
     });
 }); });
-app.get('/prueba', function (req, res) {
-    res.send('Hello from express and typescript');
-});
-/*app.get('/chat', (req, res) => {
-  res.send('Hello from express and typescript');
-});*/
-app.get('/chat/:fecha', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var fechaActual, año, mes, dia, fechaFormateada, result, err_5;
+app.get('/usuarios3/:user_id/:resultado', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var result, usuario, err_5;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                fechaActual = new Date();
-                año = fechaActual.getFullYear();
-                mes = fechaActual.getMonth() + 1;
-                dia = fechaActual.getDate();
-                fechaFormateada = año + "-" + (mes < 10 ? '0' : '') + mes + "-" + (dia < 10 ? '0' : '') + dia;
-                console.log('\x1b[36m%s\x1b[0m', "" + JSON.stringify(fechaFormateada));
-                console.log("Fecha actual: " + fechaFormateada);
-                console.log("SELECT * FROM chat WHERE date = '" + fechaFormateada + "'");
-                console.log('\x1b[36m%s\x1b[0m', "" + JSON.stringify(fechaFormateada));
-                _a.label = 1;
+                _a.trys.push([0, 5, , 6]);
+                return [4 /*yield*/, db.query("SELECT * FROM usuarios WHERE id ='" + req.params.user_id + "'")];
             case 1:
-                _a.trys.push([1, 3, , 4]);
-                return [4 /*yield*/, db.query("SELECT * FROM chat WHERE date = '" + fechaFormateada + "'")];
-            case 2:
                 result = _a.sent();
-                res.json(result.rows);
+                usuario = result.rows[0];
+                console.log('usuario:', usuario);
+                console.log('resultado:', req.params.resultado);
+                if (!usuario) return [3 /*break*/, 3];
+                console.log('Usuario encontrado. Nivel actual:', usuario.level);
+                usuario.level = parseInt(usuario.level) || 0;
+                usuario.level = Number(usuario.level) + Number(req.params.resultado);
+                console.log('Nuevo nivel:', usuario.level);
+                return [4 /*yield*/, db.query("UPDATE usuarios SET level = " + usuario.level + " WHERE id = '" + usuario.id + "'")];
+            case 2:
+                _a.sent();
+                res.json(usuario.level);
                 return [3 /*break*/, 4];
             case 3:
+                console.log('Usuario no encontrado.');
+                res.status(404).send('Usuario no encontrado');
+                _a.label = 4;
+            case 4: return [3 /*break*/, 6];
+            case 5:
                 err_5 = _a.sent();
-                console.error(err_5);
-                res.status(500).send('Internal Server Error');
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
+                console.error('Error:', err_5);
+                res.status(500).send('Internal Server Error. Error al recuperar usuario de base de datos');
+                return [3 /*break*/, 6];
+            case 6: return [2 /*return*/];
         }
     });
 }); });
-app.post('/chat', jsonParser, function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    // Función para asegurarse de que los números tengan dos dígitos (0 al principio si es necesario)
-    function padLeft(num) {
-        return num < 10 ? '0' + num : num;
-    }
-    var fechaActual, año, mes, dia, fechaFormateada, horaActual, horas, minutos, segundos, horaFormateada, result, err_6;
+app.get('/usuarios/:usuario', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var usuario, result, err_6, result, err_7;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                fechaActual = new Date();
-                año = fechaActual.getFullYear();
-                mes = fechaActual.getMonth() + 1;
-                dia = fechaActual.getDate();
-                fechaFormateada = año + "-" + (mes < 10 ? '0' : '') + mes + "-" + (dia < 10 ? '0' : '') + dia;
-                console.log('\x1b[36m%s\x1b[0m', "" + JSON.stringify(fechaFormateada));
-                console.log("Fecha actual: " + fechaFormateada);
-                horaActual = new Date();
-                horas = fechaActual.getHours();
-                minutos = fechaActual.getMinutes();
-                segundos = fechaActual.getSeconds();
-                horaFormateada = padLeft(horas) + ':' + padLeft(minutos) + ':' + padLeft(segundos);
-                console.log(horaFormateada);
-                // Imprimir la hora
-                console.log(horaFormateada);
-                console.log(req.body);
-                console.log("INSERT INTO chat ( date, name, message, time ) VALUES ('" + fechaFormateada + "', '" + req.body.name + "', '" + req.body.message + "' , '" + horaFormateada + "')");
-                console.log("" + JSON.stringify(req.body));
+                console.log("ENDPOINT : /usuarios/:usuario");
+                console.log("INPUT VALUES" + req.params.usuario);
                 _a.label = 1;
             case 1:
                 _a.trys.push([1, 3, , 4]);
-                console.log('Ejecutando consulta SQL...');
-                console.log("" + JSON.stringify("INSERT INTO chat ( date, name, message, time ) VALUES ('" + fechaFormateada + "', '" + req.body.name + "', '" + req.body.message + "' , '" + horaFormateada + "')"));
-                return [4 /*yield*/, db.query("INSERT INTO chat  ( date, name, message, time ) VALUES ('" + fechaFormateada + "', '" + req.body.name + "', '" + req.body.message + "', '" + horaFormateada + "')")];
+                return [4 /*yield*/, db.query("SELECT * FROM usuarios WHERE id ='" + req.params.usuario + "'")];
             case 2:
                 result = _a.sent();
-                console.log('Consulta SQL ejecutada con éxito:');
-                res.json("Datos guardados correctamente");
+                console.log(JSON.stringify(result.rows));
+                usuario = result.rows;
                 return [3 /*break*/, 4];
             case 3:
                 err_6 = _a.sent();
-                console.error('Error al ejecutar la consulta SQL:', err_6);
-                res.status(500).send('Internal Server Error');
+                console.error(err_6);
+                res.status(500).send('Internal Server Error. Error al recuperar usuario de la base e datos');
                 return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
+            case 4:
+                if (!(usuario.length > 0)) return [3 /*break*/, 5];
+                //el usuario existe
+                res.json({ user: usuario[0], created: false });
+                return [3 /*break*/, 8];
+            case 5:
+                _a.trys.push([5, 7, , 8]);
+                return [4 /*yield*/, db.query("INSERT INTO usuarios (id, level) VALUES ( '" + req.params.usuario + "', 0) ")];
+            case 6:
+                result = _a.sent();
+                console.log(result);
+                res.json({ user: { id: req.params.usuario, level: 0 }, created: true });
+                return [3 /*break*/, 8];
+            case 7:
+                err_7 = _a.sent();
+                console.error(err_7);
+                res.status(500).send('Internal Server Error. Error alcrear usuario.');
+                return [3 /*break*/, 8];
+            case 8: return [2 /*return*/];
         }
     });
 }); });
-/*app.get('/', (req, res) => {
-  res.send('Hello from express and typescript');
-});
-/*....*/
-/*
-
-app.get('/alumnos/:alumno', async (req, res) => {
-  console.log("SELECT * FROM alumnos WHERE name = '" + req.params.alumno + "'");
-  try {
-    const result = await db.query("SELECT * FROM alumnos WHERE name = '" + req.params.alumno + "'");
-    res.json(result.rows);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Internal Server Error');
-  }
-});
-
-app.get('/alumnos', async (req, res) => {
-
-  console.log(`SELECT * FROM alumnos WHERE name = '${req.query.name}'`);
-  try {
-    const result = await db.query("SELECT * FROM alumnos");
-    res.json(result.rows);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Internal Server Error');
-  }
-});
-
-app.post('/alumnos', jsonParser, async (req, res) => {
-  console.log(req.body)
-  console.log(`INSERT INTO alumnos VALUES (${req.body.id}, '${req.body.name}', ${req.body.age})`);
-  try {
-    const result = await db.query(`INSERT INTO alumnos VALUES (${req.body.id}, '${req.body.name}', ${req.body.age})`);
-    console.log(result);
-    res.json("Datos guardados correctamente");
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Internal Server Error');
-  }
-});*/
+app.get('/usuarios1/:user_id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var result, err_8;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, db.query("SELECT * FROM usuarios WHERE id ='" + req.params.user_id + "'")];
+            case 1:
+                result = _a.sent();
+                console.log(JSON.stringify(result.rows[0]));
+                res.json(result.rows[0]);
+                return [3 /*break*/, 3];
+            case 2:
+                err_8 = _a.sent();
+                console.error(err_8);
+                res.status(500).send('Internal Server Error. Error al recuperar usuario de base de datos');
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); });
+app.get('/prueba', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        try {
+            console.log("prueba");
+        }
+        catch (err) {
+            console.error(err);
+            res.status(500).send('Internal Server Error. Error al recuperar usuario de base de datos');
+        }
+        return [2 /*return*/];
+    });
+}); });
 var port = process.env.PORT || 3000;
 app.listen(port, function () { return console.log("App listening on PORT " + port); });

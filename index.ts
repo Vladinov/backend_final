@@ -65,184 +65,145 @@ app.get('/preguntas', (req, res) => {
       }
      });
 
-     
-app.post('/orders', jsonParser, async (req, res) => {
-  console.log("\x1b[44m", `INSERT INTO orders (menu_id,  state) VALUES (${req.body.menu_id}, '${req.body.state}')`);
-  try {
-    console.log('\x1b[41m', 'se van a guardar los datos en la base de datos');
-    let now = new Date();
-    let isoString = now.toISOString();
-    let dateString = isoString.substring(0, 10);
-  
- var fechaActual = new Date();
-
- var año = fechaActual.getFullYear();
- var mes = ('0' + (fechaActual.getMonth() + 1)).slice(-2); 
- var dia = ('0' + fechaActual.getDate()).slice(-2);
-
- var fechaFormateada = año + '-' + mes + '-' + dia;
- console.log(fechaFormateada);
-
-
-var horaActual = new Date();
-
-var horas = ('0' + horaActual.getHours()).slice(-2);
-var minutos = ('0' + horaActual.getMinutes()).slice(-2);
-var segundos = ('0' + horaActual.getSeconds()).slice(-2);
-
-var horaFormateada = horas + ':' + minutos + ':' + segundos;
-console.log(horaFormateada);
-
-    const result = await db.query(`INSERT INTO orders (menu_id,  state, date, time) VALUES (${req.body.menu_id}, '${req.body.state}', '${fechaFormateada}', '${horaFormateada}')`);
-    res.json("Datos guardados correctamente");
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Internal Server Error');
-  }
-});
-
-console.log('\x1b[36m%s\x1b[0m', 'Se enseñaran los menus en la cocina'); 
-app.get('/orders', async(req, res) => {
-  try {
-    console.log('\x1b[41m', 'se mostratran los menus en la cocina');
-    const result = await db.query("SELECT * FROM orders INNER JOIN menus ON orders.menu_id = menus.id ORDER BY state");
-    res.json(result.rows);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Internal Server Error');
-  }
-});
-
-app.get('/orders/:menu_id', async(req, res) => {
-  try {
-    console.log('\x1b[41m', 'Actualizar estado de pedido a "done".');
-    const result = await db.query(`UPDATE orders SET state = 'done' WHERE menu_id = ${req.params.menu_id}`);
-    res.json(result.rows);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Internal Server Error');
-  }
-});
-
-app.get('/prueba', (req, res) => {
-  res.send('Hello from express and typescript');
-});
-/*app.get('/chat', (req, res) => {
-  res.send('Hello from express and typescript');
-});*/
-
-app.get('/chat/:fecha', async (req, res) => {
-  const fechaActual: Date = new Date();
-
-  // Obtener el año, mes y día
-  const año: number = fechaActual.getFullYear();
-  const mes: number = fechaActual.getMonth() + 1; // Sumamos 1 porque los meses van de 0 a 11
-  const dia: number = fechaActual.getDate();
-  
-  // Formatear la fecha como "YYYY-MM-DD"
-  const fechaFormateada: string = `${año}-${mes < 10 ? '0' : ''}${mes}-${dia < 10 ? '0' : ''}${dia}`;
-  console.log('\x1b[36m%s\x1b[0m',`${JSON.stringify(fechaFormateada)}`)
-  console.log(`Fecha actual: ${fechaFormateada}`);
-  
-  console.log("SELECT * FROM chat WHERE date = '" + fechaFormateada + "'");
-  console.log('\x1b[36m%s\x1b[0m',`${JSON.stringify(fechaFormateada)}`);
-  try {
-    const result = await db.query("SELECT * FROM chat WHERE date = '" + fechaFormateada + "'");
-    res.json(result.rows);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Internal Server Error');
-  }
-});
-
-app.post('/chat', jsonParser, async (req, res) => {
-  const fechaActual: Date = new Date();
-
-  // Obtener el año, mes y día
-  const año: number = fechaActual.getFullYear();
-  const mes: number = fechaActual.getMonth() + 1; // Sumamos 1 porque los meses van de 0 a 11
-  const dia: number = fechaActual.getDate();
-   // Formatear la fecha como "YYYY-MM-DD"
-   const fechaFormateada: string = `${año}-${mes < 10 ? '0' : ''}${mes}-${dia < 10 ? '0' : ''}${dia}`;
-   console.log('\x1b[36m%s\x1b[0m',`${JSON.stringify(fechaFormateada)}`)
-   console.log(`Fecha actual: ${fechaFormateada}`);
-   const horaActual = new Date();
-  //hola
-   // Obtener la hora, los minutos y los segundos
-   const horas = fechaActual.getHours();
-   const minutos = fechaActual.getMinutes();
-   const segundos = fechaActual.getSeconds();
+     app.get('/preguntas/:temas', async (req, res) => {
+      try {
+        const result = await db.query("SELECT * FROM preguntas WHERE temas = '" + req.params.temas + "'" );
+        console.log(JSON.stringify(result.rows));
+        res.json(result.rows);
+      } catch (err) {
+        console.error(err);
+        res.status(500).send('Internal Server Error. Error al recuperar usuario de base de datos');
+      }
+   });
    
-   // Formatear la hora como una cadena (opcional)
-   const horaFormateada = padLeft(horas) + ':' + padLeft(minutos) + ':' + padLeft(segundos);
-
-   console.log(horaFormateada);
-
-// Función para asegurarse de que los números tengan dos dígitos (0 al principio si es necesario)
-function padLeft(num: number) {
-    return num < 10 ? '0' + num : num;
-}
    
-   // Imprimir la hora
-   console.log(horaFormateada);
-  console.log(req.body)
-  console.log(`INSERT INTO chat ( date, name, message, time ) VALUES ('${fechaFormateada}', '${req.body.name}', '${req.body.message}' , '${horaFormateada}')`);
-  console.log(`${JSON.stringify(req.body)}`);
+   
+   
+   app.get('/respuestas/:preguntas', async (req, res) => {
+      try {
+        const result = await db.query("SELECT * FROM respuestas WHERE preguntas = '" + req.params.preguntas + "'" );
+        console.log(JSON.stringify(result.rows));
+        res.json(result.rows);
+      } catch (err) {
+        console.error(err);
+        res.status(500).send('Internal Server Error. Error al recuperar usuario de base de datos');
+      }
+   });
+   
+   
+   
+   
+   app.get('/usuarios1/:user_id', async (req, res) => {
+      try {
+        const result = await db.query("SELECT * FROM usuarios WHERE id ='" + req.params.user_id + "'" );
+        console.log(JSON.stringify(result.rows[0]));
+        res.json(result.rows[0]);
+      } catch (err) {
+        console.error(err);
+        res.status(500).send('Internal Server Error. Error al recuperar usuario de base de datos');
+      }
+   });
+   
+   
+   
+   
+   
+   
+   
+   
+   app.get('/usuarios3/:user_id/:resultado', async (req, res) => {
+      try {
+         const result = await db.query("SELECT * FROM usuarios WHERE id ='" + req.params.user_id + "'" );
+         let usuario = result.rows[0];
+         console.log('usuario:', usuario);
+         console.log('resultado:', req.params.resultado);
+         if (usuario) {
+             console.log('Usuario encontrado. Nivel actual:', usuario.level);
+             usuario.level = parseInt(usuario.level) || 0;
+             usuario.level = Number(usuario.level) + Number(req.params.resultado);
+             console.log('Nuevo nivel:', usuario.level);
+             await db.query(`UPDATE usuarios SET level = ${usuario.level} WHERE id = '${usuario.id}'`);
+             res.json(usuario.level);
+         } else {
+             console.log('Usuario no encontrado.');
+             res.status(404).send('Usuario no encontrado');
+         }
+      } catch (err) {
+        console.error('Error:', err);
+        res.status(500).send('Internal Server Error. Error al recuperar usuario de base de datos');
+      }
+   });
+   
+   
+   
+   
+   
+   
+   
+   
+   app.get('/usuarios/:usuario', async (req, res) => {
+      console.log("ENDPOINT : /usuarios/:usuario")
+      console.log("INPUT VALUES" + req.params.usuario)
+      let usuario;
+   
+   
+   
+   
+       //1 buscar el usuario en la tabla usuarios
+       try {
+         const result = await db.query("SELECT * FROM usuarios WHERE id ='" + req.params.usuario + "'");
+         console.log(JSON.stringify(result.rows))
+         usuario = result.rows;
+        // res.json(result.rows);
+      } catch (err) {
+         console.error(err);
+         res.status(500).send('Internal Server Error. Error al recuperar usuario de la base e datos')
+      }
+   
+   
+   
+   
+      if(usuario.length > 0){
+   //el usuario existe
+   res.json({user: usuario [0], created: false});
+      } else{
+   //el usuari res.json({user: result, created: true});o no existe
+   try {
+      const result = await db.query(`INSERT INTO usuarios (id, level) VALUES ( '${req.params.usuario}', 0) `);
+      console.log(result)
+      res.json({user: {id:req.params.usuario, level: 0}, created: true});
+   } catch (err) {
+      console.error(err);
+      res.status(500).send('Internal Server Error. Error alcrear usuario.')
+   }
+      }
+   });
+   
+   
+   app.get('/usuarios1/:user_id', async (req, res) => {
+      try {
+        const result = await db.query("SELECT * FROM usuarios WHERE id ='" + req.params.user_id + "'" );
+        console.log(JSON.stringify(result.rows[0]));
+        res.json(result.rows[0]);
+      } catch (err) {
+        console.error(err);
+        res.status(500).send('Internal Server Error. Error al recuperar usuario de base de datos');
+      }
+   });
+   
+   
+   
+   
+   app.get('/prueba', async (req, res) => {
+      try {
+      console.log("prueba")
+      } catch (err) {
+        console.error(err);
+        res.status(500).send('Internal Server Error. Error al recuperar usuario de base de datos');
+      }
+   });
+   
 
-  
-  try {
-    console.log('Ejecutando consulta SQL...');
-    console.log (`${JSON.stringify(`INSERT INTO chat ( date, name, message, time ) VALUES ('${fechaFormateada}', '${req.body.name}', '${req.body.message}' , '${horaFormateada}')`)}`);
-    const result = await db.query(`INSERT INTO chat  ( date, name, message, time ) VALUES ('${fechaFormateada}', '${req.body.name}', '${req.body.message}', '${horaFormateada}')`);
-
-      console.log('Consulta SQL ejecutada con éxito:');
-    res.json("Datos guardados correctamente");
-  } catch (err) {
-    console.error('Error al ejecutar la consulta SQL:', err);
-    res.status(500).send('Internal Server Error');
-  }
-});
-/*app.get('/', (req, res) => {
-  res.send('Hello from express and typescript');
-});
-/*....*/
-/*
-
-app.get('/alumnos/:alumno', async (req, res) => {
-  console.log("SELECT * FROM alumnos WHERE name = '" + req.params.alumno + "'");
-  try {
-    const result = await db.query("SELECT * FROM alumnos WHERE name = '" + req.params.alumno + "'");
-    res.json(result.rows);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Internal Server Error');
-  }
-});
-
-app.get('/alumnos', async (req, res) => {
-
-  console.log(`SELECT * FROM alumnos WHERE name = '${req.query.name}'`);
-  try {
-    const result = await db.query("SELECT * FROM alumnos");
-    res.json(result.rows);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Internal Server Error');
-  }
-});
-
-app.post('/alumnos', jsonParser, async (req, res) => {
-  console.log(req.body)
-  console.log(`INSERT INTO alumnos VALUES (${req.body.id}, '${req.body.name}', ${req.body.age})`);
-  try {
-    const result = await db.query(`INSERT INTO alumnos VALUES (${req.body.id}, '${req.body.name}', ${req.body.age})`);
-    console.log(result);
-    res.json("Datos guardados correctamente");
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Internal Server Error');
-  }
-});*/
 
 const port = process.env.PORT || 3000;
 

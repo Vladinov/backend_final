@@ -72,18 +72,37 @@ var app = express_1.default();
 });*/
 app.use(cors_1.default());
 var jsonParser = body_parser_1.default.json();
-console.log('\x1b[36m%s\x1b[0m', 'Empeza el api para que se muestren los menus');
-app.get('/menus', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var result, err_1;
+app.get('/preguntas', function (req, res) {
+    console.log(req.params);
+    console.log(req.query);
+    res.send("SELECT dificultad FROM temas'" + req.params.dificultad + "'");
+});
+app.get('/temas', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var result, y, sum, index, max, min, random, err_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                console.log('\x1b[41m', 'se mostratran los menus por pantalla');
-                return [4 /*yield*/, db.query("SELECT * FROM menus")];
+                return [4 /*yield*/, db.query("SELECT * FROM temas ")];
             case 1:
                 result = _a.sent();
-                res.json(result.rows);
+                console.log(result.rows);
+                y = result.rows;
+                sum = 0;
+                index = 0;
+                max = 15;
+                min = 0;
+                random = Math.random() * (max - min) + min;
+                console.log("random" + random);
+                while (sum < random) {
+                    sum = sum + y[index].probabilidad;
+                    index = index + 1;
+                    console.log("sum" + sum);
+                }
+                index = index - 1;
+                console.log("index" + index);
+                console.log(y[index]);
+                res.send(y[index]);
                 return [3 /*break*/, 3];
             case 2:
                 err_1 = _a.sent();
@@ -94,7 +113,6 @@ app.get('/menus', function (req, res) { return __awaiter(void 0, void 0, void 0,
         }
     });
 }); });
-console.log('\x1b[36m%s\x1b[0m', 'Se recogeran los menus que ha selecionado los clientes');
 app.post('/orders', jsonParser, function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var now, isoString, dateString, fechaActual, año, mes, dia, fechaFormateada, horaActual, horas, minutos, segundos, horaFormateada, result, err_2;
     return __generator(this, function (_a) {

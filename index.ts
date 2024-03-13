@@ -28,19 +28,44 @@ interface Menu {
   ingredientes: string[];
 }
 
-console.log('\x1b[36m%s\x1b[0m', 'Empeza el api para que se muestren los menus'); 
-app.get('/menus', async(req, res) => {
-  try {
-    console.log('\x1b[41m', 'se mostratran los menus por pantalla');
-    const result = await db.query("SELECT * FROM menus");
-    res.json(result.rows);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Internal Server Error');
-  }
-});
+app.get('/preguntas', (req, res) => {
+   console.log(req.params)
+   console.log(req.query)
+       res.send("SELECT dificultad FROM temas'" + req.params.dificultad + "'");
+   });
+   
+   app.get('/temas', async (req, res) => {
+      try {
+         const result = await db.query("SELECT * FROM temas " );
+         console.log(result.rows);
+         let y = result.rows
+         let sum = 0
+         let index = 0
+         let max = 15
+         let min = 0
+         let random = Math.random() * (max - min) + min;
+         console.log("random" + random)
+         while(sum < random) {
+           sum = sum + y[index].probabilidad
+           index = index + 1
+           console.log("sum" + sum)
+     
+     
+     
+     
+         }
+         index = index - 1
+         console.log("index" + index)
+         console.log(y[index] )
+         res.send(y[index])
+        
+      } catch (err) {
+         console.error(err);
+         res.status(500).send('Internal Server Error')
+      }
+     });
 
-console.log('\x1b[36m%s\x1b[0m', 'Se recogeran los menus que ha selecionado los clientes'); 
+     
 app.post('/orders', jsonParser, async (req, res) => {
   console.log("\x1b[44m", `INSERT INTO orders (menu_id,  state) VALUES (${req.body.menu_id}, '${req.body.state}')`);
   try {

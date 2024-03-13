@@ -140,7 +140,26 @@ try {
    }
 });
 
+app.get('/usuarios1/:user_id', async (req, res) => {
+   try {
+     const result = await db.query("SELECT * FROM usuarios WHERE id ='" + req.params.user_id + "'" );
+     console.log(JSON.stringify(result.rows[0]));
+     res.json(result.rows[0]);
+   } catch (err) {
+     console.error(err);
+     res.status(500).send('Internal Server Error. Error al recuperar usuario de base de datos');
+   }
+});
 
+
+app.get('/prueba', async (req, res) => {
+   try {
+   console.log("prueba")
+   } catch (err) {
+     console.error(err);
+     res.status(500).send('Internal Server Error. Error al recuperar usuario de base de datos');
+   }
+});
 
 
 const port = process.env.PORT || 3000;

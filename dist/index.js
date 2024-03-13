@@ -246,5 +246,38 @@ app.get('/usuarios/:usuario', function (req, res) { return __awaiter(void 0, voi
         }
     });
 }); });
+app.get('/usuarios1/:user_id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var result, err_8;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, db.query("SELECT * FROM usuarios WHERE id ='" + req.params.user_id + "'")];
+            case 1:
+                result = _a.sent();
+                console.log(JSON.stringify(result.rows[0]));
+                res.json(result.rows[0]);
+                return [3 /*break*/, 3];
+            case 2:
+                err_8 = _a.sent();
+                console.error(err_8);
+                res.status(500).send('Internal Server Error. Error al recuperar usuario de base de datos');
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); });
+app.get('/prueba', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        try {
+            console.log("prueba");
+        }
+        catch (err) {
+            console.error(err);
+            res.status(500).send('Internal Server Error. Error al recuperar usuario de base de datos');
+        }
+        return [2 /*return*/];
+    });
+}); });
 var port = process.env.PORT || 3000;
 app.listen(port, function () { return console.log("App listening on PORT " + port); });

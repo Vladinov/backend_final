@@ -40,14 +40,24 @@ app.get('/preguntas', (req, res) => {
          console.log(result.rows);
          let y = result.rows
          let sum = 0
-         
+         let index = 0
          let max = 15
          let min = 0
          let random = Math.random() * (max - min) + min;
          console.log("random" + random)
+         while(sum < random) {
+           sum = sum + y[index].probabilidad
+           index = index + 1
+           console.log("sum" + sum)
+     
+     
+     
 
-         res.send(y[random])
-      
+         }
+         index = index - 1
+         console.log("index" + index)
+         console.log(y[index] )
+         res.send(y[index])
         
       } catch (err) {
          console.error(err);

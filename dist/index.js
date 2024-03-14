@@ -78,7 +78,7 @@ app.get('/preguntas', function (req, res) {
     res.send("SELECT dificultad FROM temas'" + req.params.dificultad + "'");
 });
 app.get('/temas', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var result, y, sum, max, min, random, err_1;
+    var result, y, sum, index, max, min, random, err_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -89,11 +89,20 @@ app.get('/temas', function (req, res) { return __awaiter(void 0, void 0, void 0,
                 console.log(result.rows);
                 y = result.rows;
                 sum = 0;
+                index = 0;
                 max = 15;
                 min = 0;
                 random = Math.random() * (max - min) + min;
                 console.log("random" + random);
-                res.send(y[random]);
+                while (sum < random) {
+                    sum = sum + y[index].probabilidad;
+                    index = index + 1;
+                    console.log("sum" + sum);
+                }
+                index = index - 1;
+                console.log("index" + index);
+                console.log(y[index]);
+                res.send(y[index]);
                 return [3 /*break*/, 3];
             case 2:
                 err_1 = _a.sent();
